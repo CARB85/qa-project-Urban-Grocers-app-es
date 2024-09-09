@@ -1,6 +1,11 @@
+# create_kit_name_kit_test.py
 import pytest
 from sender_stand_request import post_new_user, post_new_client_kit
-from data import get_kit_body
+from data import (
+    kit_body_1_char, kit_body_511_chars, kit_body_512_chars,
+    kit_body_empty, kit_body_special_chars, kit_body_spaces,
+    kit_body_numbers, kit_body_no_param, kit_body_numeric
+)
 
 def get_new_user_token():
     return post_new_user()
@@ -16,14 +21,29 @@ def negative_assert_code_400(kit_body):
     response = post_new_client_kit(kit_body, auth_token)
     assert response.status_code == 400
 
-@pytest.mark.parametrize("kit_body", [get_kit_body("a"), get_kit_body("A" * 511), get_kit_body(""), get_kit_body("A" * 512), get_kit_body("!@#$%^&*()"), get_kit_body(" A Aaa "), get_kit_body("123")])
-def test_valid_kit_name(kit_body):
-    if len(kit_body["name"]) in [1, 511, 0, 512]:
-        negative_assert_code_400(kit_body)
-    else:
-        positive_assert(kit_body)
+def test_name_with_1_character():
+    positive_assert(kit_body_1_char)
 
-@pytest.mark.parametrize("kit_body", [get_kit_body("!@#$%^&*()"), get_kit_body(" A Aaa "), get_kit_body("123")])
-def test_valid_kit_name_characters(kit_body):
-    positive_assert(kit_body)
+def test_name_with_511_characters():
+    positive_assert(kit_body_511_chars)
 
+def test_name_with_512_characters():
+    negative_assert_code_400(kit_body_512_chars)
+
+def test_name_empty():
+    negative_assert_code_400(kit_body_empty)
+
+def test_name_with_special_chars():
+    positive_assert(kit_body_special_chars)
+
+def test_name_with_spaces():
+    positive_assert(kit_body_spaces)
+
+def test_name_with_numbers():
+    positive_assert(kit_body_numbers)
+
+def test_name_missing_param():
+    negative_assert_code_400(kit_body_no_param)
+
+def test_name_with_numeric_value():
+    negative_assert_code_400(kit_body_numeric)
