@@ -1,49 +1,61 @@
-# create_kit_name_kit_test.py
-import pytest
-from sender_stand_request import post_new_user, post_new_client_kit
+from sender_stand_request import post_new_client_kit, post_new_user
 from data import (
-    kit_body_1_char, kit_body_511_chars, kit_body_512_chars,
-    kit_body_empty, kit_body_special_chars, kit_body_spaces,
-    kit_body_numbers, kit_body_no_param, kit_body_numeric
+    short_name_kit_body, long_name_kit_body, empty_name_kit_body,
+    exceeds_limit_kit_body, special_chars_kit_body, spaces_in_name_kit_body, numbers_in_name_kit_body, no_name_kit_body,
+    numeric_name_kit_body
 )
 
+# Función para obtener un nuevo token de usuario
 def get_new_user_token():
     return post_new_user()
 
+# Función para pruebas positivas (código 201)
 def positive_assert(kit_body):
-    auth_token = get_new_user_token()
-    response = post_new_client_kit(kit_body, auth_token)
+    token = get_new_user_token()
+    response = post_new_client_kit(kit_body, token)
+    print(f"El código de respuesta es: {response.status_code}")
     assert response.status_code == 201
     assert response.json()["name"] == kit_body["name"]
 
+# Función para pruebas negativas (código 400)
 def negative_assert_code_400(kit_body):
-    auth_token = get_new_user_token()
-    response = post_new_client_kit(kit_body, auth_token)
+    token = get_new_user_token()
+    response = post_new_client_kit(kit_body, token)
+    print(f"El código de respuesta es: {response.status_code}")
     assert response.status_code == 400
 
-def test_name_with_1_character():
-    positive_assert(kit_body_1_char)
+# Prueba con nombre de un solo carácter (Positiva)
+def test_short_name_kit():
+    positive_assert(short_name_kit_body)
 
-def test_name_with_511_characters():
-    positive_assert(kit_body_511_chars)
+# Prueba con nombre de 511 caracteres (Positiva)
+def test_long_name_kit():
+    positive_assert(long_name_kit_body)
 
-def test_name_with_512_characters():
-    negative_assert_code_400(kit_body_512_chars)
+# Prueba con nombre vacío (Negativa)
+def test_empty_name_kit():
+    negative_assert_code_400(empty_name_kit_body)
 
-def test_name_empty():
-    negative_assert_code_400(kit_body_empty)
+# Prueba con nombre mayor a 512 caracteres (Negativa)
+def test_name_exceeds_limit_kit():
+    negative_assert_code_400(exceeds_limit_kit_body)
 
-def test_name_with_special_chars():
-    positive_assert(kit_body_special_chars)
+# Prueba con caracteres especiales (Positiva)
+def test_special_chars_name_kit():
+    positive_assert(special_chars_kit_body)
 
-def test_name_with_spaces():
-    positive_assert(kit_body_spaces)
+# Prueba con espacios en el nombre (Positiva)
+def test_spaces_in_name_kit():
+    positive_assert(spaces_in_name_kit_body)
 
-def test_name_with_numbers():
-    positive_assert(kit_body_numbers)
+# Prueba con números en el nombre (Positiva)
+def test_numbers_in_name_kit():
+    positive_assert(numbers_in_name_kit_body)
 
-def test_name_missing_param():
-    negative_assert_code_400(kit_body_no_param)
+# Prueba sin el parámetro 'name' (Negativa)
+def test_no_name_kit():
+    negative_assert_code_400(no_name_kit_body)
 
-def test_name_with_numeric_value():
-    negative_assert_code_400(kit_body_numeric)
+# Prueba con 'name' como un número (Negativa)
+def test_numeric_name_kit():
+    negative_assert_code_400(numeric_name_kit_body)

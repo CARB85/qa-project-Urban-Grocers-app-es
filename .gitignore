@@ -1,8 +1,8 @@
 # .gitignore
+# Ignorar archivos temporales
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-env/
-venv/
-*.log
+
+# Archivos de entorno
+.env
+

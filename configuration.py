@@ -1,9 +1,10 @@
-# configuration.py
-URL_SERVICE = "https://cnt-ecdd0064-f8fc-44cc-b991-bf9ce7688b8e.containerhub.tripleten-services.com" # Inserta tu dirección de URL sin la barra diagonal al final
+URL_SERVICE = "https://cnt-bcf46df7-69cf-4cec-8ba1-74a608a37f63.containerhub.tripleten-services.com"
+CREATE_USER_PATH = "/api/v1/users"
+KITS_PATH = "/api/v1/kits"
+AUTH_HEADER = "Authorization"
+CONTENT_TYPE_HEADER = "Content-Type"
 
-# Endpoints
-CREATE_USER_PATH = f"{URL_SERVICE}/api/v1/users" # Almacena la ruta para crear un usuario o usuaria en esta variable
-KITS_PATH = f"{URL_SERVICE}/api/v1/kits" # Almacena la ruta para crear un kit en esta variable
+
 
 
 
